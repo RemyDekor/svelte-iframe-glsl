@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>A random web page containing the iframe</title>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/reset.css" />
+
+    <script type="module" defer src="./frames.js"></script>
+
+    <style>
+      :root {
+        background: gainsboro;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .wrapper {
+        text-align: center;
+        margin: 20px auto;
+        width: 90vw;
+        min-width: 320px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      h1,
+      p {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <h1>A random web page containing the iframe</h1>
+
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus
+        mollitia, officiis odit facere qui amet natus aspernatur numquam blanditiis
+        saepe sequi nesciunt fuga vel exercitationem voluptate distinctio maxime
+        quibusdam illo!Nulla, asperiores accusamus illum rerum eius possimus sequi
+        aut quasi beatae, veritatis dicta mollitia. Accusamus quam quod provident. Ea
+        recusandae eaque corrupti blanditiis eum ratione quidem distinctio? Numquam,
+        dolorem architecto!
+      </p>
+
+      <div id="embed-container"></div>
+
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus
+        mollitia, officiis odit facere qui amet natus aspernatur numquam blanditiis
+        saepe sequi nesciunt fuga vel exercitationem voluptate distinctio maxime
+        quibusdam illo!Nulla, asperiores accusamus illum rerum eius possimus sequi
+        aut quasi beatae, veritatis dicta mollitia. Accusamus quam quod provident. Ea
+        recusandae eaque corrupti blanditiis eum ratione quidem distinctio? Numquam,
+        dolorem architecto!
+      </p>
+    </div>
+  </body>
+</html>
