@@ -1,7 +1,9 @@
 import * as THREE from "three"
 
 // @ts-ignore
-import fragShader from "../shaders/frag.glsl"
+import fragShader from "../shaders/shader.frag"
+// @ts-ignore
+import vertShader from "../shaders/shader.vert"
 
 /**
  * @param {Object} args
@@ -11,6 +13,7 @@ import fragShader from "../shaders/frag.glsl"
 const RotatingCube = ({ parent }) => {
   const geo = new THREE.BoxBufferGeometry(1, 1, 1)
   const mat = new THREE.ShaderMaterial({
+    vertexShader: vertShader,
     fragmentShader: fragShader,
   })
   const mesh = new THREE.Mesh(geo, mat)

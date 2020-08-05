@@ -13,19 +13,13 @@
   // 3. Sets up a listener to send the height every time the frame resizes
   frames.initFrame()
   dataPromise.then(frames.sendFrameHeight)
-
-  let notClicked = true
 </script>
 
 <wrapper>
   {#await dataPromise}
     <Loader />
   {:then response}
-    {#if notClicked}
-      <DataVisualization
-        on:click={() => (notClicked = !notClicked)}
-        data={response} />
-    {/if}
+    <DataVisualization data={response} />
   {:catch error}
     <p class="error">could not fetch data</p>
   {/await}

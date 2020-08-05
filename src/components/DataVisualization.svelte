@@ -23,7 +23,7 @@
   })
 </script>
 
-<div on:click class="canvasContainer">
+<div class="canvasContainer">
   <canvas bind:this={canvasRef} />
 </div>
 <p>here is your data: {JSON.stringify(data)}</p>
