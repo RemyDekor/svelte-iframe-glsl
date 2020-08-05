@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte"
   import { throttle } from "../utils"
-  import SceneManager from "../threejs/SceneManager"
+  import SceneManagerF from "../threejs/entities/SceneManagerF"
+  import RotatingCubeF from "../threejs/entities/RotatingCubeF"
 
   export let data
 
@@ -14,7 +15,9 @@
 
   onMount(() => {
     window.addEventListener("resize", onWindowResize)
-    entryPoint = SceneManager({ canvas: canvasRef })
+    entryPoint = SceneManagerF(canvasRef, {
+      children: [["rotatingCube", RotatingCubeF()]],
+    })
 
     return function onDestroy() {
       window.removeEventListener("resize", onWindowResize)

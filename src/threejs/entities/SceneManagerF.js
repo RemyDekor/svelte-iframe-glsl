@@ -1,8 +1,10 @@
 import * as THREE from "three"
-import { filterMap } from "../utils"
-import RotatingCube from "./RotatingCube"
+import { filterMap } from "../../utils"
 
-const SceneManager = ({ canvas }) => {
+/** @type SceneManagerFactory */
+const SceneManagerFactory = (canvas, props) => {
+  let { children = [] } = props
+
   const origin = new THREE.Vector3()
 
   const renderer = new THREE.WebGLRenderer({
@@ -21,27 +23,22 @@ const SceneManager = ({ canvas }) => {
   camera.lookAt(origin)
 
   const scene = new THREE.Scene()
+  children.forEach(([key, entity]) => scene.add(entity.ref))
 
-  /** @type {Map<string, MeshEntity>} */
-  const entities = new Map([
-    ["rotatingCube", RotatingCube({ parent: scene })],
-    // ...
-  ])
-
-  /** @type {Map<string, MeshEntity>} */
-  const updatables = filterMap(
-    entities,
-    (value) => typeof value.update === "function"
+  /** @type {Array<string, Entity>} */
+  const updatables = children.filter(
+    ([key, entity]) => typeof entity.update === "function"
   )
 
   /** @type {number} */
   let rafID
   const clock = new THREE.Clock(true)
 
-  function mainUpdate() {
-    rafID = requestAnimationFrame(mainUpdate)
+  function update() {
+    rafID = requestAnimationFrame(update)
     const elapsedTime = clock.getElapsedTime()
-    updatables.forEach((updtbl) => updtbl.update(elapsedTime))
+    // console.log(props.children)
+    updatables.forEach(([key, entity]) => entity.update(elapsedTime))
     renderer.render(scene, camera)
   }
 
@@ -58,7 +55,8 @@ const SceneManager = ({ canvas }) => {
   function destroy() {
     window.removeEventListener("resize", onWindowResize)
     cancelAnimationFrame(rafID)
-    entities.forEach((entity) => {
+    children.forEach((entity) => {
+      scene.remove(entity.ref)
       entity.destroy()
     })
     renderer.dispose()
@@ -67,13 +65,13 @@ const SceneManager = ({ canvas }) => {
 
   window.addEventListener("resize", onWindowResize)
   onWindowResize()
-  mainUpdate()
+  update()
 
   return {
+    update,
     onWindowResize,
-    mainUpdate,
     destroy,
   }
 }
 
-export default SceneManager
+export default SceneManagerFactory

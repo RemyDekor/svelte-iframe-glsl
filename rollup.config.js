@@ -41,7 +41,6 @@ export default {
     file: "public/build/bundle.js",
   },
   plugins: [
-    glslify({ compress: production }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
@@ -62,6 +61,7 @@ export default {
       dedupe: ["svelte"],
     }),
     commonjs(),
+    glslify({ compress: production }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
