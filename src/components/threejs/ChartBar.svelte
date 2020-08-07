@@ -1,44 +1,33 @@
 <script context="module">
-  // Abstraction(module) script, executed only once,
-  // even if the component is called several times.
-  // can NOT receive props in this part of the component
-  // can export variables to other files
-  const geo = new THREE.BoxBufferGeometry(1, 1, 1)
-  const mat = new THREE.ShaderMaterial({
-    vertexShader: vertShader,
-    fragmentShader: fragShader,
-  })
+  const barStyles = {
+    maxHeight: 0.8,
+    width: 0.3,
+    spacing: 0.5,
+  }
 </script>
 
 <script>
   // Instance script, executed for each component call
-  import { onMount } from "svelte"
-  import * as THREE from "three"
-  import { getContext } from "svelte"
-  import { canvasCtxKey } from "./Canvas.svelte"
-  // @ts-ignore
-  import fragShader from "../../shaders/basic.frag"
-  // @ts-ignore
-  import vertShader from "../../shaders/basic.vert"
+  import Cube from "./Cube.svelte"
+  import { spring } from "svelte/motion"
 
-  export let position = [0, 0, 0]
-  export let scale = [0, 0, 0]
+  export let value
+  export let index
+  export let arrayLength
 
-  const mesh = new THREE.Mesh(geo, mat)
-  $: mesh.position.set(...position)
-  $: mesh.scale.set(...scale)
+  $: barHeight.set(value * barStyles.maxHeight)
 
-  const canvasCtxState = getContext(canvasCtxKey)
-  $: ({ scene } = $canvasCtxState)
-
-  onMount(() => {
-    scene.add(mesh)
-
-    return function onDestroy() {
-      geo.dispose()
-      mat.dispose()
-    }
+  const barHeight = spring(value * barStyles.maxHeight, {
+    stiffness: 0.1,
+    damping: 0.25,
   })
+
+  $: position = [
+    index * barStyles.spacing - ((arrayLength - 1) * barStyles.spacing) / 2,
+    ($barHeight - barStyles.maxHeight) / 2,
+    0,
+  ]
 </script>
 
+<Cube {position} scale={[barStyles.width, $barHeight, barStyles.width * 0.4]} />
 <slot />
