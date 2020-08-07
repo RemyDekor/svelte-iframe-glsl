@@ -3,7 +3,9 @@
   import * as frames from "@newswire/frames" // for iframe sizing etc
 
   import Loader from "./components/Loader.svelte"
-  import DataVisualization from "./components/DataVisualization.svelte"
+  // import DataVisualization from "./components/DataVisualization.svelte"
+
+  import MyThreeJsApp from "./components/MyThreeJsApp.svelte"
 
   // props
   export let dataPromise
@@ -19,7 +21,8 @@
   {#await dataPromise}
     <Loader />
   {:then response}
-    <DataVisualization data={response} />
+    <MyThreeJsApp data={response.data} />
+    <!-- <DataVisualization data={response} /> -->
   {:catch error}
     <p class="error">could not fetch data</p>
   {/await}
