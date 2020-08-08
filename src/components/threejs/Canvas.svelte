@@ -32,7 +32,7 @@
       0.001,
       500
     )
-    camera.position.z = 3
+    camera.position.z = 3 // Should be a prop
     camera.lookAt(new THREE.Vector3())
 
     const onWindowResize = () => {
