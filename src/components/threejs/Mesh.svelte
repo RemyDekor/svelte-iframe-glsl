@@ -18,6 +18,7 @@
   export let scale: [number, number, number] = [0, 0, 0]
   export let rotation: [number, number, number] = [0, 0, 0]
   export let quaternion: [number, number, number, number] = [0, 0, 0, 1]
+  // TODO: visibility = "visible" || "hidden" (use threejs layers maybe)
 
   const mesh = new THREE.Mesh(geometry, material)
   $: mesh.geometry = geometry
