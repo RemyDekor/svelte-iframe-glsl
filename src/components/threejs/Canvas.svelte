@@ -1,23 +1,18 @@
-<script context="module">
-  export const canvasCtxKey = {}
-</script>
-
-<script>
+<script lang="ts">
   import * as THREE from "three"
   import { onMount, setContext, tick } from "svelte"
-  import { writable } from "svelte/store"
 
   let canvasRef
 
   const scene = new THREE.Scene()
 
-  const canvasCtxState = writable({
-    get scene() {
+  const canvasCtxState = {
+    get parent() {
       return scene
     },
-  })
+  }
 
-  setContext(canvasCtxKey, canvasCtxState)
+  setContext("parent", canvasCtxState)
 
   onMount(() => {
     const renderer = new THREE.WebGLRenderer({
@@ -32,7 +27,7 @@
       0.001,
       500
     )
-    camera.position.z = 3
+    camera.position.z = 3 // Should be a prop
     camera.lookAt(new THREE.Vector3())
 
     const onWindowResize = () => {

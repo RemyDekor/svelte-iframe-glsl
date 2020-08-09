@@ -1,9 +1,8 @@
 <script lang="ts">
   import * as THREE from "three"
   import Canvas from "./threejs/Canvas.svelte"
-  import ChartBar from "./threejs/Mesh.svelte"
-  import { each, onMount } from "svelte/internal"
-
+  import ChartBar from "./threejs/ChartBar.svelte"
+  import { onMount } from "svelte/internal"
   // @ts-ignore
   import fragShader from "../shaders/basic.frag"
   // @ts-ignore
@@ -11,22 +10,23 @@
 
   export let data
 
-  // check if D3 or other lib (ramda, lodash?) could be usefull here, for data transforms
-  const doSomeNeatTransforms = (data) => {
-    return data.relevantNumbers.sort().reverse()
+  // check if D3 or other lib (ramda, lodash?) could be usefull here, for data transforms etc
+  const transformDataInASmartWay = (data) => {
+    return data.relevantNumbers.sort()
   }
 
-  let chartBars = doSomeNeatTransforms(data)
+  $: chartBars = transformDataInASmartWay(data)
 
-  const myGeometry = new THREE.BoxBufferGeometry(1, 1, 1)
+  const myGeometry = new THREE.SphereBufferGeometry(0.5, 14, 16)
   const myMaterial = new THREE.ShaderMaterial({
     vertexShader: vertShader,
     fragmentShader: fragShader,
   })
 
   onMount(() => {
-    // on mount stuff
+    // on mount stuff, if DOM/canvas is needed
     return function destroy() {
+      // on destroy stuff, to avoid memory leaks
       myGeometry.dispose()
       myMaterial.dispose()
     }
@@ -34,12 +34,12 @@
 </script>
 
 <Canvas>
-  {#each chartBars as chartBar, index}
+  {#each chartBars as value, index}
     <ChartBar
+      {value}
       material={myMaterial}
       geometry={myGeometry}
-      position={[index * 0.5 - (chartBars.length - 1) * 0.25, 0, 0]}
-      scale={[0.3, chartBar * 0.8, 0.3]}
-      rotation={[0, 0.2, 0]} />
+      {index}
+      arrayLength={chartBars.length} />
   {/each}
 </Canvas>
