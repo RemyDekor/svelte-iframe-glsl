@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { fade } from "svelte/transition"
   import * as frames from "@newswire/frames" // for iframe sizing etc
 
@@ -8,7 +8,7 @@
   import MyThreeJsApp from "./components/MyThreeJsApp.svelte"
 
   // props
-  export let dataPromise
+  export let dataPromise: Promise
 
   // 1. Sends the initial frame's content height
   // 2. Sets up an one-time istener to send the height on load
