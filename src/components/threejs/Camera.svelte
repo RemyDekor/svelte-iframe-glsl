@@ -4,9 +4,10 @@
 
   export let position: [number, number, number] = [0, 0, 3]
   export let target: THREE.Vector3 = new THREE.Vector3()
+  export let isUpdatingLookAt: boolean = false
 
   const canvasCtxState = getContext("canvas")
-  const { canvas, activeCamera } = canvasCtxState
+  const { canvas, cameras, activeCamera } = canvasCtxState
 
   const camera = new THREE.PerspectiveCamera(
     45,
@@ -16,9 +17,13 @@
   )
   $: camera.position.set(...position)
   $: camera.lookAt(target)
+  $: if (isUpdatingLookAt && target && position) camera.lookAt(target)
 
-  export let isActive: boolean = true
-  $: if (isActive) activeCamera.set(camera)
+  export let key
+  $: {
+    if (key) camera.key = key
+    cameras.add(camera)
+  }
 
   $: if ($canvas) camera.aspect = $canvas.clientWidth / $canvas.clientHeight
 

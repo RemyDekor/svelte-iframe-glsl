@@ -4,8 +4,11 @@
   import Scene from "./Scene.svelte"
   import { onMount, setContext, tick } from "svelte"
   import { writable } from "svelte/store"
+  import { createCameras } from "./utlis/stores"
 
+  // stores adeed in canvasCtxState
   const canvas = writable(null)
+  const cameras = createCameras()
   const activeScene = writable(null)
   const activeCamera = writable(null)
 
@@ -13,11 +16,29 @@
 
   const canvasCtxState = {
     canvas,
+    cameras,
     activeScene,
     activeCamera,
   }
 
   setContext("canvas", canvasCtxState)
+
+  export let camKey: String = null
+  $: if (camKey) {
+    const foundCamera = $cameras.find((cam) => cam.key === camKey)
+    if (foundCamera) {
+      activeCamera.set(foundCamera)
+      updateCamAspect(foundCamera)
+    }
+  }
+
+  let canvasWidth: number
+  let canvasHeight: number
+
+  const updateCamAspect = (camera: THREE.PerspectiveCamera): void => {
+    camera.aspect = canvasWidth / canvasHeight
+    camera.updateProjectionMatrix()
+  }
 
   onMount(() => {
     canvas.set(canvasRef)
@@ -29,13 +50,12 @@
     })
 
     const onWindowResize = () => {
-      const width = $canvas.clientWidth
-      const height = $canvas.clientHeight
+      canvasWidth = $canvas.clientWidth
+      canvasHeight = $canvas.clientHeight
 
-      renderer.setSize(width, height)
+      renderer.setSize(canvasWidth, canvasHeight)
 
-      $activeCamera.aspect = width / height
-      $activeCamera.updateProjectionMatrix()
+      updateCamAspect($activeCamera)
     }
 
     // TODO: PERFORMANCE: do not use a loop for rendering, unless there is a shader using time as input
@@ -57,12 +77,7 @@
 </script>
 
 <canvas bind:this={canvasRef} />
-<!-- default camera -->
-<Camera />
-<!-- default scene -->
-<Scene>
-  <slot />
-</Scene>
+<slot />
 
 <style>
   canvas {
