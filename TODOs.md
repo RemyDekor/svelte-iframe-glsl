@@ -1,4 +1,6 @@
 - 🔍 implement Group.svelte, so we could scale the grouped meshes independently
 - 🔍 check **svelthree** repo !!!
+- 🔍 vitual canvases https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
 - 🔍 check if there are no memory leak on Threejs component
+- 🔍 offscreen canvas
 - 🔍 bug: (vu sur chrome) quand on est sur un autre onglet, et qu'on revient sur celui-ci, les barres ont des tailles étranges (++ ou --), puis se remettent immédiatement en place -> setInterval

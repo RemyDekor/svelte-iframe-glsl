@@ -13,12 +13,12 @@
   const simulateFetchData = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
-        const sucessfulFetch = Math.random() > 0.08
+        const sucessfulFetch = Math.random() > 0.05
         console.log("simulate fetch")
         if (sucessfulFetch) {
           resolve({
             data: {
-              relevantNumbers: Array(5)
+              relevantNumbers: Array(10)
                 .fill(undefined)
                 .map(() => Math.random()),
               lastUpdated: Date.now(),

@@ -1,49 +1,47 @@
 <script lang="ts">
   import * as THREE from "three"
+  import Camera from "./Camera.svelte"
+  import Scene from "./Scene.svelte"
   import { onMount, setContext, tick } from "svelte"
+  import { writable } from "svelte/store"
 
-  let canvasRef
+  const canvas = writable(null)
+  const activeScene = writable(null)
+  const activeCamera = writable(null)
 
-  const scene = new THREE.Scene()
+  let canvasRef = null
 
   const canvasCtxState = {
-    get parent() {
-      return scene
-    },
+    canvas,
+    activeScene,
+    activeCamera,
   }
 
-  setContext("parent", canvasCtxState)
+  setContext("canvas", canvasCtxState)
 
   onMount(() => {
+    canvas.set(canvasRef)
+
     const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef,
+      canvas: $canvas,
       antialias: true,
       // alpha: true,
     })
 
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      canvasRef.clientWidth / canvasRef.clientHeight,
-      0.001,
-      500
-    )
-    camera.position.z = 3 // Should be a prop
-    camera.lookAt(new THREE.Vector3())
-
     const onWindowResize = () => {
-      const width = canvasRef.clientWidth
-      const height = canvasRef.clientHeight
+      const width = $canvas.clientWidth
+      const height = $canvas.clientHeight
 
       renderer.setSize(width, height)
 
-      camera.aspect = width / height
-      camera.updateProjectionMatrix()
+      $activeCamera.aspect = width / height
+      $activeCamera.updateProjectionMatrix()
     }
 
     // TODO: PERFORMANCE: do not use a loop for rendering, unless there is a shader using time as input
     const renderLoop = () => {
       requestAnimationFrame(renderLoop)
-      renderer.render(scene, camera)
+      renderer.render($activeScene, $activeCamera)
     }
 
     window.addEventListener("resize", onWindowResize)
@@ -51,15 +49,20 @@
     renderLoop()
 
     return function destroy() {
+      console.log("dispose of renderer")
       window.removeEventListener("resize", onWindowResize)
       renderer.dispose()
-      scene.dispose()
     }
   })
 </script>
 
 <canvas bind:this={canvasRef} />
-<slot />
+<!-- default camera -->
+<Camera />
+<!-- default scene -->
+<Scene>
+  <slot />
+</Scene>
 
 <style>
   canvas {

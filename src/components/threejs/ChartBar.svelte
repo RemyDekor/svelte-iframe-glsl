@@ -2,6 +2,7 @@
   // Instance script, executed for each component call
 
   import Mesh from "./Mesh.svelte"
+  import Group from "./Group.svelte"
   import { spring } from "svelte/motion"
 
   export let value
@@ -18,7 +19,7 @@
   }
 
   const dotStyles = {
-    width: 0.5,
+    width: 0.15,
   }
 
   $: barHeight.set(value * barStyles.maxHeight)
@@ -28,23 +29,22 @@
     damping: 0.25,
   })
 
-  let position
-  $: position = [
-    index * barStyles.spacing - ((arrayLength - 1) * barStyles.spacing) / 2,
-    ($barHeight - barStyles.maxHeight) / 2,
-    0,
-  ]
+  let positionX, positionY
+  $: positionX =
+    index * barStyles.spacing - ((arrayLength - 1) * barStyles.spacing) / 2
+  $: positionY = ($barHeight - barStyles.maxHeight) / 2
 </script>
 
-<Mesh
-  {geometry}
-  {material}
-  {position}
-  scale={[barStyles.width, $barHeight, barStyles.width * 0.4]}>
+<Group position={[positionX, 0, 0]}>
   <Mesh
     {geometry}
     {material}
-    position={[0, $barHeight * 0.5 + dotStyles.width, 0]}
-    scale={[dotStyles.width, dotStyles.width / ($barHeight * 2), dotStyles.width]} />
-</Mesh>
+    position={[0, positionY, 0]}
+    scale={[barStyles.width, $barHeight, barStyles.width * 0.4]} />
+  <Mesh
+    {geometry}
+    {material}
+    position={[0, $barHeight - (barStyles.maxHeight - dotStyles.width) * 0.5, 0]}
+    scale={[dotStyles.width, dotStyles.width, dotStyles.width]} />
+</Group>
 <slot />

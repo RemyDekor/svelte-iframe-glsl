@@ -7,7 +7,7 @@
   export let geometry: THREE.BufferGeometry = new THREE.BoxBufferGeometry(1, 1, 1)
   export let material: THREE.Material = new THREE.MeshNormalMaterial()
   export let position: [number, number, number] = [0, 0, 0]
-  export let scale: [number, number, number] = [0, 0, 0]
+  export let scale: [number, number, number] = [1, 1, 1]
   export let rotation: [number, number, number] = [0, 0, 0]
   export let quaternion: [number, number, number, number] = [0, 0, 0, 1]
   // TODO: visibility = "visible" || "hidden" (use threejs layers maybe)

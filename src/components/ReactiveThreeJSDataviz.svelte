@@ -27,6 +27,7 @@
     // on mount stuff, if DOM/canvas is needed
     return function destroy() {
       // on destroy stuff, to avoid memory leaks
+      console.log("dispose of geometries and materials")
       myGeometry.dispose()
       myMaterial.dispose()
     }
