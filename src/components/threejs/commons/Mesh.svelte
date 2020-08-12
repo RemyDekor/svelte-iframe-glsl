@@ -1,8 +1,7 @@
 <script lang="ts">
   // Instance script, executed for each component call
-  import { onMount } from "svelte"
+  import { onMount, getContext, setContext, afterUpdate } from "svelte"
   import * as THREE from "three"
-  import { getContext, setContext } from "svelte"
 
   export let geometry: THREE.BufferGeometry = new THREE.BoxBufferGeometry(1, 1, 1)
   export let material: THREE.Material = new THREE.MeshNormalMaterial()
@@ -19,6 +18,13 @@
   $: mesh.scale.set(...scale)
   $: mesh.rotation.set(...rotation)
   $: mesh.quaternion.set(...quaternion)
+
+  // ask for re-render when updated
+  const canvasCtxState = getContext("canvas")
+  const { rendererNeedsUpdate } = canvasCtxState
+  afterUpdate(() => {
+    rendererNeedsUpdate.set(true)
+  })
 
   const parentCtxState = getContext("parent")
   const { parent }: { parent: THREE.Object3D } = parentCtxState

@@ -2,20 +2,23 @@
   import * as THREE from "three"
   import Camera from "./Camera.svelte"
   import Scene from "./Scene.svelte"
-  import { onMount, setContext, tick } from "svelte"
+  import { onMount, setContext, afterUpdate, tick } from "svelte"
   import { writable } from "svelte/store"
-  import { createCameras } from "./utlis/stores"
+  import { createCameras, createRenderNeedsUpdate } from "../utils/stores"
 
   // stores adeed in canvasCtxState
   const canvas = writable(null)
+  const rendererNeedsUpdate = createRenderNeedsUpdate()
   const cameras = createCameras()
   const activeScene = writable(null)
   const activeCamera = writable(null)
 
+  let renderer: THREE.WebGLRenderer
   let canvasRef = null
 
   const canvasCtxState = {
     canvas,
+    rendererNeedsUpdate,
     cameras,
     activeScene,
     activeCamera,
@@ -40,10 +43,26 @@
     camera.updateProjectionMatrix()
   }
 
+  // maybe there is a special rendererNeedsUpdate case when a variable time is used
+  // also should we have some kind of logic to detect out-of-view objects and not render them (check culling? might be unecessary to do this logic in js)
+
+  // TODO: set rendererNeedsUpdate to true in every base objects
+  // (Mesh/Lights/Group/Camera... when they update (check Mesh.svelte for reference)
+  // $: if ($rendererNeedsUpdate) render()
+
+  function renderLoop() {
+    requestAnimationFrame(renderLoop)
+    if ($rendererNeedsUpdate) {
+      // console.log("✨render")
+      renderer.render($activeScene, $activeCamera)
+      rendererNeedsUpdate.set(false)
+    }
+  }
+
   onMount(() => {
     canvas.set(canvasRef)
 
-    const renderer = new THREE.WebGLRenderer({
+    renderer = new THREE.WebGLRenderer({
       canvas: $canvas,
       antialias: true,
       // alpha: true,
@@ -56,12 +75,6 @@
       renderer.setSize(canvasWidth, canvasHeight)
 
       updateCamAspect($activeCamera)
-    }
-
-    // TODO: PERFORMANCE: do not use a loop for rendering, unless there is a shader using time as input
-    const renderLoop = () => {
-      requestAnimationFrame(renderLoop)
-      renderer.render($activeScene, $activeCamera)
     }
 
     window.addEventListener("resize", onWindowResize)

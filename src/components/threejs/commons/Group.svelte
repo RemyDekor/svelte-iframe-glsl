@@ -2,7 +2,7 @@
   // Instance script, executed for each component call
   import { onMount } from "svelte"
   import * as THREE from "three"
-  import { getContext, setContext } from "svelte"
+  import { getContext, setContext, afterUpdate } from "svelte"
 
   export let position: [number, number, number] = [0, 0, 0]
   export let scale: [number, number, number] = [1, 1, 1]
@@ -15,6 +15,13 @@
   $: group.scale.set(...scale)
   $: group.rotation.set(...rotation)
   $: group.quaternion.set(...quaternion)
+
+  // ask for re-render when updated
+  const canvasCtxState = getContext("canvas")
+  const { rendererNeedsUpdate } = canvasCtxState
+  afterUpdate(() => {
+    rendererNeedsUpdate.set(true)
+  })
 
   const parentCtxState = getContext("parent")
   const { parent }: { parent: THREE.Object3D } = parentCtxState

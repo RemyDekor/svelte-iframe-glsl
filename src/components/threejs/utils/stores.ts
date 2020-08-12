@@ -20,4 +20,13 @@ function createCameras() {
   }
 }
 
-export { createCameras }
+function createRenderNeedsUpdate() {
+  const { subscribe, set, update } = writable(false)
+
+  return {
+    subscribe,
+    set,
+  }
+}
+
+export { createCameras, createRenderNeedsUpdate }

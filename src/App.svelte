@@ -18,7 +18,7 @@
         if (sucessfulFetch) {
           resolve({
             data: {
-              relevantNumbers: Array(10)
+              relevantNumbers: Array(9)
                 .fill(undefined)
                 .map(() => Math.random()),
               lastUpdated: Date.now(),

@@ -1,22 +1,23 @@
 <script lang="ts">
   import * as THREE from "three"
-  import { onMount, getContext } from "svelte"
+  import { onMount, afterUpdate, getContext } from "svelte"
 
   export let position: [number, number, number] = [0, 0, 3]
   export let target: THREE.Vector3 = new THREE.Vector3()
+  export let fov: number = 45
+  export let near: number = 0.001
+  export let far: number = 500
   export let isUpdatingLookAt: boolean = false
 
   const canvasCtxState = getContext("canvas")
-  const { canvas, cameras, activeCamera } = canvasCtxState
+  const { canvas, cameras, activeCamera, rendererNeedsUpdate } = canvasCtxState
 
-  const camera = new THREE.PerspectiveCamera(
-    45,
-    1, // cant'access canvas yet: canvas.clientWidth / canvas.clientHeight,
-    0.001,
-    500
-  )
+  const camera = new THREE.PerspectiveCamera(fov, 1, near, far)
   $: camera.position.set(...position)
   $: camera.lookAt(target)
+  $: camera.fov = fov
+  $: camera.near = near
+  $: camera.far = far
   $: if (isUpdatingLookAt && target && position) camera.lookAt(target)
 
   export let key
@@ -26,6 +27,11 @@
   }
 
   $: if ($canvas) camera.aspect = $canvas.clientWidth / $canvas.clientHeight
+
+  // ask for re-render when camera is updated (&& if is activeCamera)
+  afterUpdate(() => {
+    if ($activeCamera.key === camera.key) rendererNeedsUpdate.set(true)
+  })
 
   onMount(() => {
     return function destroy() {

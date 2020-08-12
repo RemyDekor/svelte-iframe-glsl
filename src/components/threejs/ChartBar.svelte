@@ -1,8 +1,8 @@
 <script lang="ts">
   // Instance script, executed for each component call
 
-  import Mesh from "./Mesh.svelte"
-  import Group from "./Group.svelte"
+  import Mesh from "./commons/Mesh.svelte"
+  import Group from "./commons/Group.svelte"
   import { spring } from "svelte/motion"
 
   export let value

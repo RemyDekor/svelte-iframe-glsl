@@ -1,14 +1,19 @@
 <script lang="ts">
   import * as THREE from "three"
-  import { onMount, setContext, getContext } from "svelte"
+  import { onMount, afterUpdate, setContext, getContext } from "svelte"
 
   const scene = new THREE.Scene()
 
   const canvasCtxState = getContext("canvas")
-  const { activeScene } = canvasCtxState
+  const { rendererNeedsUpdate, activeScene } = canvasCtxState
 
   export let isActive = true
   $: if (isActive) activeScene.set(scene)
+
+  // ask for re-render when updated
+  afterUpdate(() => {
+    rendererNeedsUpdate.set(true)
+  })
 
   const sceneCtxState = {
     get parent() {

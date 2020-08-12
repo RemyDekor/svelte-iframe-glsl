@@ -1,4 +1,3 @@
-- 🔍 implement Group.svelte, so we could scale the grouped meshes independently
 - 🔍 check **svelthree** repo !!!
 - 🔍 vitual canvases https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
 - 🔍 check if there are no memory leak on Threejs component

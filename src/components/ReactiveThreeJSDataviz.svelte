@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as THREE from "three"
-  import Canvas from "./threejs/Canvas.svelte"
-  import Camera from "./threejs/Camera.svelte"
-  import Scene from "./threejs/Scene.svelte"
+  import Canvas from "./threejs/commons/Canvas.svelte"
+  import Camera from "./threejs/commons/Camera.svelte"
+  import Scene from "./threejs/commons/Scene.svelte"
   import ChartBar from "./threejs/ChartBar.svelte"
   import { onMount } from "svelte/internal"
   // @ts-ignore
@@ -37,7 +37,7 @@
 
   // playground code below
   const camIds = ["cam0", "cam1", "cam2"]
-  let activeCamIndex = 0
+  let activeCamIndex = 2
 
   const clock = new THREE.Clock()
   let elapsedTime = 0
@@ -45,7 +45,6 @@
   let isPaused = false
   const loop = () => {
     rafID = requestAnimationFrame(loop)
-    console.log("loop")
     elapsedTime = clock.getElapsedTime()
   }
 
