@@ -12,6 +12,7 @@
   const canvasCtxState = getContext("canvas")
   const { canvas, cameras, activeCamera, rendererNeedsUpdate } = canvasCtxState
 
+  // TODO: OrthoCamera
   const camera = new THREE.PerspectiveCamera(fov, 1, near, far)
   $: camera.position.set(...position)
   $: camera.lookAt(target)
@@ -20,22 +21,25 @@
   $: camera.far = far
   $: if (isUpdatingLookAt && target && position) camera.lookAt(target)
 
-  export let key
+  export let key: string = ""
   $: {
-    if (key) camera.key = key
+    camera.key = key
     cameras.add(camera)
   }
 
-  $: if ($canvas) camera.aspect = $canvas.clientWidth / $canvas.clientHeight
+  $: if ($activeCamera && $canvas)
+    camera.aspect = $canvas.clientWidth / $canvas.clientHeight
 
   // ask for re-render when camera is updated (&& if is activeCamera)
   afterUpdate(() => {
-    if ($activeCamera.key === camera.key) rendererNeedsUpdate.set(true)
+    if ($activeCamera && $activeCamera.key === camera.key)
+      rendererNeedsUpdate.set(true)
   })
 
   onMount(() => {
     return function destroy() {
       //clean up
+      cameras.remove(camera.key)
     }
   })
 </script>

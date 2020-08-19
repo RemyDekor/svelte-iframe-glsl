@@ -5,7 +5,8 @@
   import Loader from "./components/Loader.svelte"
   // import DataVisualization from "./components/DataVisualization.svelte"
 
-  import MyThreeJsApp from "./components/ReactiveThreeJSDataviz.svelte"
+  // import MyThreeJsApp from "./components/MyMultipleCam&ScenesApp.svelte"
+  import MyThreeJsApp from "./components/MySimpleThreeJsApp.svelte"
 
   // props
   export let color
