@@ -1,4 +1,7 @@
 - 🔍 see how onWindowResize can be called in children too, in a clean way
+- 🔍 Use a Map/Set instead of arrays in stores.ts (scenes and cameras)
+- 🔍 When not specifying keys for cam or scene, Error log is misleading (first render does not have a camera/scene yet)
+- 🔍 Add OrtoCamera (Camera.svelte only uses PerspectiveCamera fro now)
 - 🔍 check **svelthree** repo !!!
 - 🔍 vitual canvases https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
 - 🔍 check if there are no memory leak on Threejs component

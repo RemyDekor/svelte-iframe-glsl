@@ -20,6 +20,25 @@ function createCameras() {
   }
 }
 
+function createScenes() {
+  const { subscribe, set, update } = writable([])
+
+  return {
+    subscribe,
+    add: (scene: THREE.Scene) =>
+      update((sceneArray) => {
+        const array = Array.from(sceneArray)
+        array.push(scene)
+        return array
+      }),
+    remove: (key: String) =>
+      update((sceneArray) => {
+        const array = sceneArray.filter((scene) => scene.key !== key)
+        return array
+      }),
+  }
+}
+
 function createRenderNeedsUpdate() {
   const { subscribe, set, update } = writable(false)
 
@@ -29,4 +48,4 @@ function createRenderNeedsUpdate() {
   }
 }
 
-export { createCameras, createRenderNeedsUpdate }
+export { createCameras, createScenes, createRenderNeedsUpdate }

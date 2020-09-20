@@ -5,14 +5,23 @@
   const scene = new THREE.Scene()
 
   const canvasCtxState = getContext("canvas")
-  const { rendererNeedsUpdate, activeScene } = canvasCtxState
+  const { rendererNeedsUpdate, scenes, activeScene } = canvasCtxState
+
+  export let elem = null
+  $: if (elem) console.log(elem)
 
   export let isActive = true
   $: if (isActive) activeScene.set(scene)
 
-  // ask for re-render when updated
+  export let key: string = ""
+  $: {
+    scene.key = key
+    scenes.add(scene)
+  }
+
+  // ask for re-render when scene is updated (&& if is activeScene)
   afterUpdate(() => {
-    rendererNeedsUpdate.set(true)
+    if ($activeScene.key === scene.key) rendererNeedsUpdate.set(true)
   })
 
   const sceneCtxState = {
@@ -26,6 +35,7 @@
   onMount(() => {
     //
     return function destroy() {
+      scenes.remove(scene.key)
       console.log("dispose of scene")
       scene.dispose()
     }

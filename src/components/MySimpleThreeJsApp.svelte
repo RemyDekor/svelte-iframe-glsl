@@ -9,6 +9,7 @@
   import fragShader from "../shaders/basic.frag"
   // @ts-ignore
   import vertShader from "../shaders/basic.vert"
+  import type App from "../App.svelte"
 
   export let data
 
@@ -38,6 +39,10 @@
   // playground code below
   const camIds = ["cam0", "cam1", "cam2"]
   let activeCamIndex = 2
+  const sceneIds = ["scene0", "scene1"]
+  let activeSceneIndex = 0
+
+  // let cubeElementRef, pyramidElementRef
 
   const clock = new THREE.Clock()
   let elapsedTime = 0
@@ -54,19 +59,21 @@
   setInterval(() => {
     console.log(camIds[activeCamIndex])
     activeCamIndex = (activeCamIndex + 1) % camIds.length
+    activeSceneIndex = (activeSceneIndex + 1) % sceneIds.length
     isPaused = activeCamIndex === 2
   }, 3200)
 </script>
 
-<Canvas camKey={camIds[activeCamIndex]}>
-  <Camera
+<Canvas>
+  <!-- <Camera
     key={camIds[0]}
-    position={[Math.sin(elapsedTime * 1.4), 1 + Math.cos(elapsedTime * 1.4) * 0.5, 2]} />
-  <Camera
+    position={[Math.sin(elapsedTime * 1.4), 1 + Math.cos(elapsedTime * 1.4) * 0.5, 2]} /> -->
+  <!-- <Camera
     key={camIds[1]}
     isUpdatingLookAt={true}
-    position={[2 + Math.cos(elapsedTime * 1.3), 1, 0.2 + Math.sin(elapsedTime)]} />
+    position={[2 + Math.cos(elapsedTime * 1.3), 1, 0.2 + Math.sin(elapsedTime)]} /> -->
   <Camera key={camIds[2]} />
+
   <Scene>
     {#each chartBars as value, index}
       <ChartBar
