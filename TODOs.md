@@ -1,3 +1,4 @@
+- 🔍 see how onWindowResize can be called in children too, in a clean way
 - 🔍 check **svelthree** repo !!!
 - 🔍 vitual canvases https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
 - 🔍 check if there are no memory leak on Threejs component
